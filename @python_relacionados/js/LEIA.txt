@@ -1,0 +1,78 @@
+
+
+--------------------------------------------- Utilitários para Javascript ---------------------------------------------
+    -> IDE (VScode)
+    -> Interpretador (NodeJS)
+    -> Plugins (bracket pair colorizer,
+                code runner,
+                live server,
+                material icon theme,
+                prettier code formatter,
+                ubuntu style theme)
+
+    OBS: Sobre [code runner], ir ao painel de extensões do VScode e procurar por ele
+         Clicar na engrenagem [Extension settings] e marcar a opção [Code-runner: Clear Previous Output]
+         Clicar na engrenagem [Extension settings] e marcar a opção [Code-runner: Save all files before run]
+
+---------------------------------------------- Configuração em Javascript ----------------------------------------------
+    -> Abrir configurações: [ctrl + shift + p]
+    -> Digitar: [Open Settings (JSON)]
+    -> Digitar o seguinte código de configuração:
+
+    {
+    "editor.fontSize": 13,
+    "terminal.integrated.fontSize": 13,
+    "workbench.iconTheme": "material-icon-theme",
+    // no vídeo você viu uma config de fonte aqui,
+    // mas ela não é compatível com todos os sistemas, por isso, tirei ok?
+    "editor.minimap.enabled": false,
+    "editor.wordWrap": "on",
+    "workbench.editor.tabSizing": "shrink",
+    "explorer.compactFolders": false,
+    "window.zoomLevel": 1,
+    // formatter
+    "prettier.tabWidth": 2,
+    "prettier.semi": false,
+    "prettier.singleQuote": true,
+    "prettier.trailingComma": "none",
+    "prettier.arrowParens": "avoid",
+    "prettier.endOfLine": "auto",
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "liveServer.settings.donotShowInfoMsg": true,
+    "liveServer.settings.donotVerifyTags": true,
+    "bracket-pair-colorizer-2.depreciation-notice": false,
+    }
+
+---------------------------------------------------- Atalhos úteis ----------------------------------------------------
+    ctrl + shift + p       || Abrir configurações
+    ctrl +                 || Aumenta o zoom no VScode
+    ctrl -                 || Reduz o zoom no VScode
+    ctrl + b               || Abrir/fechar o painel lateral esquerdo
+    ctrl + x               || Excluir uma linha de código
+    alt + shift + f        || Corrigi códigos (prettier code formatter já faz isso)
+    ctrl + alt + shift + / || Selecionar múltiplas linhas de código (customizado)
+    ctrl + alt + shift + j || Selecionar todas as ocorrências de uma busca (customizado)
+    ctrl + alt + shift + c || Copiar uma linha selecionada para baixo (customizado)
+    alt + mouse esquerdo   || Selecionar múltiplas linhas, em uma posição específica
+    !                      || Em um arquivo [html], isso chama um esqueleto inicial completo
+    nome da tag            || Em um arquivo [html], escrever o nome da tag, já monta sua sintaxe: <></>
+
+    NOMES DOS ATALHOS NO VSCODE
+    Copy line down
+    Select all occurences of find match
+    Toggle block comment
+
+-------------------------------------------------- Modificar atalhos --------------------------------------------------
+    -> Ir às configurações do VScode (canto inferior direito, ícone da engrenagem)
+    -> Clique em 'Keyboard shortcuts'
+    -> Será aberto um painel com todos os atalhos. Você deve pesquisar aquele que deseja alterar
+
+    EXEMPLO
+    -> Procurar por 'toggle block comment' e mudar para 'ctrl + shift + /' (comentar múltiplas linhas de código)
