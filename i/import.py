@@ -8,7 +8,6 @@ from pyautogui import click as clk                          # importação espec
 from pyautogui import click, drag, hotkey, moveTo           # importações específicas múltiplas
 from pyautogui import hotkey as htk, position as pst        # importações específicas múltiplas apelidadas
 from pyautogui import (click, drag, hotkey)                 # importações específicas múltiplas em tupla
-from pyautogui import (click as c, drag as d, hotkey as k)  # importações específicas múltiplas apelidadas em tupla
 from PYTHON import print_vs_return                          # importação modular
 from PYTHON.a import alt_codes                              # importação diretório modular
 

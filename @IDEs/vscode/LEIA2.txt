@@ -1,0 +1,5 @@
+Tutorial sobre símbolos em documentos
+
+!@#     || arquivos do tipo Javascript (.js)
+!@# (   || arquivo que referencie algum recurso do Javascript
+!@# [C: || arquivo que referencie à explicação de algum recurso do Javascript
