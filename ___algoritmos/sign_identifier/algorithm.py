@@ -186,39 +186,9 @@ class Sign:
     def birthday(self, new_value):
         self.__birthday = new_value
 
-    # @property
-    # def day(self):
-    #     return self.__day
-    #
-    # @property
-    # def month(self):
-    #     return self.__month
-    #
-    # @property
-    # def year(self):
-    #     return self.__year
-
-
-
-    # @day.setter
-    # def day(self, new_value):
-    #     self.__day = new_value
-    #
-    # @month.setter
-    # def month(self, new_value):
-    #     self.__month = new_value
-    #
-    # @year.setter
-    # def year(self, new_value):
-    #     self.__year = new_value
-
-    # def __init__(self, name, day, month, year):
     def __init__(self, name, birthday):
         self.__name = name
         self.__birthday = birthday
-        # self.__day = day
-        # self.__month = month
-        # self.__year = year
 
 
 if __name__ == '__main__':
