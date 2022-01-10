@@ -1,0 +1,9 @@
+
+
+O arquivo [ algorithm.sql ] representa a sintaxe simbólica de criação do bdd e tabela para o algoritmo
+O comando em [ algorithm.sql ] foi executado no [ MySQL Workbench ]
+O arquivo [ database.py ] é posterior à criação do banco e da dependência citada abaixo
+O arquivo [ database.py ] possui 2 vars a serem importadas ao modelo no arquivo [ algorithm.py ]
+
+------- DEPENDÊNCIAS -------
+pip install mysql-connector-python
