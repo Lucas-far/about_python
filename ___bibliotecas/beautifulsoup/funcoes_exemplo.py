@@ -381,19 +381,3 @@ $(document).ready(function(){
                  file_path='caixa/',
                  file_name=f'_3_cw_1_pt_2_img{number}',  # todo: Editável,
                  file_format='.png')
-
-
-# soup = BeautifulSoup(html_string, 'lxml')
-# print(soup.prettify())
-#
-# var = soup.find_all('img')
-# box = []
-#
-# for data in var:
-#     box.append(data.get('src'))
-#
-# print(box)
-# box = [data.replace('images/', f'{source}') for data in box]
-#
-# for data in box:
-#     print(data)
