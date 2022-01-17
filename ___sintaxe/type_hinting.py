@@ -12,6 +12,13 @@ def cacha_alta(sentence: list, separator: str) -> str:
     return f"{separator}".join(box)
 
 
+def show_your_data(name: tuple, birth: set, address: list, gender: str, disability: bool) -> dict:
+    person_data = {
+        'name': name, 'birth': birth, 'address': address, 'gender': gender, 'desability': disability
+    }
+    return person_data
+
+
 if __name__ == '__main__':
-    print(cacha_alta(sentence=['Eu', 'e', 'você'], separator='_'))
     print(cacha_alta.__annotations__)
+    print(show_your_data.__annotations__)
