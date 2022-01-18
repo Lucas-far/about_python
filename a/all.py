@@ -2,18 +2,34 @@
 
 """
 Objetivo:
-    converter todos os dados dentro de variáveis iteráveis ou literais para booleano...
-    se a conversão de todos os dados = True, então o método retorna = True...
-    se há um dado = False, então o método retorna = False
+    - Converter todos os dados dentro de variáveis iteráveis ou literais para booleano...
+    - Se a conversão de todos os dados = True, então o método retorna = True...
+    - Se há um dado = False, então o método retorna = False
 
 Observação:
-    1. se o método receber um parâmetro que não é uma classe iterável, ele gera [ TypeError ]
+    - Se o método receber um parâmetro que não é uma classe iterável, ele gera [ TypeError ]
 """
 
-# @dict @list @set @str @tuple
 
-print(f"{all({'': ''}) = }")  # all({'': ''}) = False
-print(f"{all([]) = }")        # all([]) = True
-print(f"{all({}) = }")        # all({}) = True
-print(f"{all('') = }")        # all('') = True
-print(f"{all(()) = }")        # all(()) = True
+def turn_data_into_bool(data_list):
+
+    this_msg_error = 'Há algum dado inválido.'
+
+    box_data = []
+
+    try:
+        for data in data_list:
+            box_data.append(all(data))
+
+        return box_data
+    except TypeError:
+        return this_msg_error
+
+
+if __name__ == '__main__':
+    these = [{'': ''}, [], {}, '', ()]
+    these2 = [{'': ''}, [], {}, '', (), 0]
+    result = turn_data_into_bool(data_list=these)
+    result2 = turn_data_into_bool(data_list=these2)
+    print(result)
+    print(result2)

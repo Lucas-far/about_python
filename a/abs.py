@@ -1,25 +1,26 @@
 
 
 """
-Objetivo
-    converter classes numéricas de valor negativo para sua versão positiva
+Objetivo:
+    - Converter classes numéricas de valor negativo para sua versão positiva
+
+Relacionamento:
+    @int @float @complex
 """
-# @bool @complex @float @int
 
-def scan(classe, dado):
+
+def turn_value_into_positive(value):
+
+    this_msg_error = 'O tipo de dado é incompatível'
+
     try:
-        print(classe, dado, abs(dado))
-    except TypeError as error:
-        print('{}{}{}'.format('\033[1:31m', error, '\033[m'))
+        return abs(value)
+    except TypeError:
+        return this_msg_error
 
-scan('booleano', True)
-scan('complexo', -7j)
-scan('dicionário', {-7: -7})
-scan('flutuante', -7.0)
-scan('inteiro', -7)
-scan('lista', [-7])
-scan('nenhum', None)
-scan('range', range(-7, -6))
-scan('conjunto', {-7})
-scan('string', '-7')
-scan('tupla', (-7,))
+
+if __name__ == '__main__':
+    print(turn_value_into_positive(value=-1))
+    print(turn_value_into_positive(value=-1.1))
+    print(turn_value_into_positive(value=-1j))
+    print(turn_value_into_positive(value=''))

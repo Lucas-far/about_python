@@ -2,34 +2,52 @@
 
 """
 Objetivo:
-    mudar diretório atual
+    - Mudar diretório atual
+
+Relacionamento:
+    @str
 
 Observação:
-    1. esse método é pode ser mesclado com o método [ getcwd() ], que pertence a mesma biblioteca
-    2. Sintaxe
-        OS Windows
-            rota: \\
-            voltar rota: ..\\
+    - No windows, a rota em string python usa o separador: \\
+    - No ubuntu,  a rota em string python usa o separador: /
 
-        OS Ubuntu
-            rota: /
-            voltar rota: /../
+    - No windows, a string para retorno de nível é: ".." ou "..\\.." ou "..\\..\\.. (etc)
+    - No ubuntu,  a string para retorno de nível é: "/../" + "/../" (etc)
+
+Exemplos:
+    ------- WINDOWS -------
+    chdir('C:\\Users\\Lucas\\Downloads\\Main\\bdd_media') || Caminho com \\
+    chdir(getcwd() + '..')                                || Retorno de um nível
+    chdir(getcwd() + '..\\..')                            || Retorno de dois níveis
+
+    ------- UBUNTU -------
+    chdir('/home/lucas/PycharmProjects/python_recursos/') || Caminho com /
+    chdir(getcwd() + '/../')                              || Retorno de um nível
+    chdir(getcwd() + '/../' + '/../')                     || Retorno de dois níveis
 """
 
-from os import chdir, getcwd
 
-# @str
+def change_location(os, where):
+    from os import chdir, path, getcwd
 
-"No Windows"
-# chdir('C:\\Users\\Lucas\\Downloads\\Main\\bdd_media')
-# chdir('..')      # retorna um nível
-# chdir('..\\..')  # retorna dois níveis
+    invalid_os = 'O sistema operacional não existe/é compatível'
+    invalid_path = 'O caminho especificado não existe'
+    then = '------- Caminho anterior -------\n'
+    now = '------- Caminho atual -------\n'
 
-"No Ubuntu"
-print(f'1 {getcwd()}')                                 # 1 /home/lucas/PycharmProjects/recursos/PYTHON/c
-chdir(getcwd() + '/../')                               # Voltando um nível
-print(f'2 {getcwd()}')                                 # 2 /home/lucas/PycharmProjects/recursos/PYTHON
-chdir('/home/lucas/PycharmProjects/python_recursos/')  # Especificando o caminho manualmente
-print(f'3 {getcwd()}')                                 # 3 /home/lucas/PycharmProjects/python_recursos
-chdir(getcwd() + '/../' + '/../')                      # Voltando dois níveis
-print(f'4 {getcwd()}')                                 # 4 /home/lucas
+    systems = ('linux', 'windows')
+    previous_path = getcwd()
+
+    if os in systems:
+        if path.exists(path=where):
+            chdir(where)
+            print(then + previous_path)
+            print(now + where)
+        else:
+            print(invalid_path)
+    else:
+        print(invalid_os)
+
+
+if __name__ == '__main__':
+    change_location(os='windows', where='C:\\Users\\Lucasf\\Downloads')

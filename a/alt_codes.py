@@ -4,17 +4,20 @@
 Fonte:
      https://www.alt-codes.net
 
-Tutorial:
-    1. seleciona-se a imagem com o mouse, ctrl + c, ctrl + v na IDE
+Procedimento no site:
+    - Seleciona-se a imagem com o mouse, ctrl + c, ctrl + v na IDE
 
 Objetivo:
-    usar uma imagem como string
+    - Usar uma imagem como string
 """
 
-# @deque @dict @list @set @str @tuple
 
-print(c := {'♥'})
-print(d := {'feliz': '☺'})
-print(l := ['☻'])
-print(s := '♦')
-print(t := ('♣',))
+def show_emoji_random():
+
+    from random import choice
+    emojis = ('♥', '☺', '☻', '♦', '♣')
+    return choice(emojis)
+
+
+if __name__ == '__main__':
+    print(show_emoji_random())

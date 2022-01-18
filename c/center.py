@@ -2,25 +2,27 @@
 
 """
 Objetivo:
-    identar um dado de classe string para a direita
+    - Identar um dado de classe string para a direita
+
+Relacionamento:
+    @str
 """
 
-# @str
 
-def scan(classe, dado):
+def text_indent(text, indent_size):
+
+    this_msg_error = 'Use somente dados inteiros positivos'
+    this_msg_error2 = 'Use somente dados inteiros'
+
     try:
-        print(classe, dado.center(50))
-    except AttributeError as error:
-        print('{}{}{}'.format('\033[1:31m', error, '\033[m'))
+        if indent_size < 1:
+            return this_msg_error
+        return text.center(indent_size)
+    except TypeError:
+        return this_msg_error2
 
-scan('booleano', True)
-scan('complexo', -7j)
-scan('dicionário', {-7: -7})
-scan('flutuante', -7.0)
-scan('inteiro', -7)
-scan('lista', [-7])
-scan('nenhum', None)
-scan('range', range(-7, -6))
-scan('conjunto', {-7})
-scan('string', '-7')
-scan('tupla', (-7))
+
+if __name__ == '__main__':
+    print(text_indent(text='Python', indent_size=50))
+    print(text_indent(text='Python', indent_size=None))
+    print(text_indent(text='Python', indent_size=-50))

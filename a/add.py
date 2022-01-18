@@ -2,44 +2,38 @@
 
 """
 Objetivo:
-     anexar um novo dado à uma variável de classe conjunto
+     - Anexar um novo dado à uma variável de classe conjunto
 
 Observação:
-    1. pode ser usado multiplamente em linha, se separado por vírgula
-    2. o método aceita somente um parâmetro por uso
-    3. classe conjunto é intolerante às classes: conjunto, dicionário e lista
+    - Pode ser usado multiplamente em linha, se separado por vírgula
+    - O método aceita somente um parâmetro por uso
+    - Classe conjunto é intolerante às classes: conjunto, dicionário e lista
+
+Relacionamento:
+    @set
 """
 
-# @set
 
-def scan(classe, dado, valor):
+def include_into_set(single_data, target, value=None, **kwargs):
+
+    this_message_error = 'Tipo de dado não é aplicável à conjuntos'
+
     try:
-        var = dado
-        var.add(valor)
-        print(classe, var)
-    except AttributeError as error2:
-        print('{}{}{}'.format('\033[1:31m', error2, '\033[m'))
+        if single_data:
+            target.add(value)
+        else:
+            for data in kwargs.values():
+                target.add(data)
+    except TypeError:
+        return this_message_error
 
-scan('booleano', True, False)
-scan('complexo', 7j, 3j)
-scan('dicionário', {}, {-7: -7})
-scan('flutuante', 7.0, -7.0)
-scan('inteiro', 7, -7)
-scan('lista', [], [-7])
-scan('nenhum', None, 0)
-scan('range', range(1, 4), range(5, 6))
-scan('conjunto', {3}, 7)
-scan('string', 'pyt', 'hon')
-scan('tupla', (), (0,))
 
-"Em linha"
-print(1, cj2 := set({}))  # set()
-cj2.add(False), cj2.add(None), cj2.add(True)
-print(1, cj2)             # {False, True, None}
-
-"Tradicional"
-print(2, cj3 := set({}))  # set()
-cj3.add(0)
-cj3.add(1.0)
-cj3.add('str')
-print(2, cj3)             # {0, 1.0, 'str'}
+if __name__ == '__main__':
+    a_set = set({})
+    print(a_set)
+    include_into_set(single_data=True, target=a_set, value='Python')
+    print(a_set)
+    include_into_set(single_data=False, target=a_set, key_1='Javascript', key_2='Ruby', key_3=None)
+    print(a_set)
+    include_into_set(single_data=True, target=a_set, value={'Python'})
+    print(a_set)

@@ -2,43 +2,36 @@
 
 """
 Objetivo:
-    anexar qualquer tipo de classe à uma variável de classe lista
+    - Anexar qualquer tipo de classe à uma variável de classe lista
 
 Observação:
-    1. pode ser usado multiplamente em linha (separação por vírgula)
-    2. dados iteráveis com + de 1 índice, quando adicionados por esse método, contam apenas como 1 índice
+    - Pode ser usado multiplamente em linha (separação por vírgula)
+    - Dados iteráveis com + de 1 índice, quando adicionados por esse método, contam apenas como 1 índice
+
+Relacionamento:
+    @list
 """
 
-# @list
 
-def scan(classe, dado, valor):
+def add_into_list(single_data, box_receiver, box_sender, value=None):
+
+    this_message_error = 'Tipo de dado não é aplicável à conjuntos'
+
     try:
-        var = dado
-        var.append(valor)
-        print(classe, var)
-    except AttributeError as error2:
-        print('{}{}{}'.format('\033[1:31m', error2, '\033[m'))
+        if single_data:
+            box_receiver.append(value)
+        else:
+            for data in box_sender:
+                box_receiver.append(data)
+    except TypeError:
+        return this_message_error
 
-scan('booleano', True, False)
-scan('complexo', 7j, 3j)
-scan('dicionário', {}, {-7: -7})
-scan('flutuante', 7.0, -7.0)
-scan('inteiro', 7, -7)
-scan('lista', [], ())
-scan('nenhum', None, 0)
-scan('range', range(1, 4), range(5, 6))
-scan('conjunto', {3}, 7)
-scan('string', 'pyt', 'hon')
-scan('tupla', (), (0,))
 
-"Em linha"
-print(12, l2 := [])  # []
-l2.append(False), l2.append(None), l2.append(True)
-print(12, l2)        # [False, None, True]
-
-"Tradicional"
-print(13, l3 := [])  # []
-l3.append(0)
-l3.append(1.0)
-l3.append('str')
-print(13, l3)        # [0, 1.0, 'str']
+if __name__ == '__main__':
+    this_var = []
+    this_var_other = {'b', 'c', 'd', 'e', 'f', 'g', ('h', 'i', 'j', 'k')}
+    print(this_var)
+    add_into_list(single_data=True, box_receiver=this_var, box_sender=None, value='a')
+    print(this_var)
+    add_into_list(single_data=False, box_receiver=this_var, box_sender=this_var_other, value=None)
+    print(this_var)

@@ -2,35 +2,38 @@
 
 """
 Objetivo:
-    converter classe inteira para sua versão binária
+    - Converter valor inteiro para sua versão binária
 
 Observação:
-    1. os dois primeiros índices do retorno do método, não fazem parte da conversão, então eles são ignorados
+    - Os dois primeiros índices do retorno do método, não fazem parte da conversão, então eles são ignorados
+
+Relacionamento:
+    @int
 """
 
-# @bool @int
 
-def scan(classe, dado):
+def integer_to_binary(value):
+
+    this_message_error = 'Uso somente valores inteiros.'
     try:
-        print(classe, dado, bin(dado)[2:])  # [2:] ignorar os dois primeiros índices
-    except TypeError as error:
-        print('{}{}{}'.format('\033[1:31m', error, '\033[m'))
+        value = bin(value)
+        value = str(value)[2:]
+        return value
+    except ValueError:
+        return this_message_error
 
-scan('booleano', True)
-scan('complexo', -7j)
-scan('dicionário', {-7: -7})
-scan('flutuante', -7.0)
-scan('inteiro', -7)
-scan('lista', [-7])
-scan('nenhum', None)
-scan('range', range(-7, -6))
-scan('conjunto', {-7})
-scan('string', '-7')
-scan('tupla', (-7,))
 
-i = 70
-i = str(bin(i))[2:]  # converte-se para string para poder retirar omitir os dois primeiros índices
-print([1], i)
+def integer_to_binary_v2(value):
 
-# Exemplo alternativo de mesmo resultado
-print([2], i2 := format(70, 'b'))
+    this_message_error = 'Uso somente valores inteiros.'
+    try:
+        value = format(value, 'b')
+        return value
+    except ValueError:
+        return this_message_error
+
+
+if __name__ == '__main__':
+    print([1], integer_to_binary(value=7))
+    print([2], integer_to_binary_v2(value=7))
+    print([3], integer_to_binary_v2(value=''))
