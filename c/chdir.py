@@ -30,24 +30,29 @@ Exemplos:
 def change_location(os, where):
     from os import chdir, path, getcwd
 
-    invalid_os = 'O sistema operacional não existe/é compatível'
-    invalid_path = 'O caminho especificado não existe'
+    invalid_os = 'O sistema operacional não existe/é compatível.'
+    invalid_path = 'O caminho especificado não existe.'
+    invalid_type = 'Use comente dados string.'
     then = '------- Caminho anterior -------\n'
     now = '------- Caminho atual -------\n'
 
     systems = ('linux', 'windows')
     previous_path = getcwd()
 
-    if os in systems:
-        if path.exists(path=where):
-            chdir(where)
-            print(then + previous_path)
-            print(now + where)
+    try:
+        if os in systems:
+            if path.exists(path=where):
+                chdir(where)
+                print(then + previous_path)
+                print(now + where)
+            else:
+                print(invalid_path)
         else:
-            print(invalid_path)
-    else:
-        print(invalid_os)
+            print(invalid_os)
+    except TypeError:
+        print(invalid_type)
 
 
 if __name__ == '__main__':
     change_location(os='windows', where='C:\\Users\\Lucasf\\Downloads')
+    change_location(os='windows', where=None)
