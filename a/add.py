@@ -31,9 +31,8 @@ def include_into_set(single_data, target, value=None, **kwargs):
 if __name__ == '__main__':
     a_set = set({})
     print(a_set)
-    include_into_set(single_data=True, target=a_set, value='Python')
+    include_into_set(single_data=True, target=a_set, value=1)
     print(a_set)
-    include_into_set(single_data=False, target=a_set, key_1='Javascript', key_2='Ruby', key_3=None)
-    print(a_set)
-    include_into_set(single_data=True, target=a_set, value={'Python'})
+    # Parâmetros 3, 4, 5 são as chaves criadas por **kwargs
+    include_into_set(single_data=False, target=a_set, key_1=2, key_2=3, key_3=4)
     print(a_set)
