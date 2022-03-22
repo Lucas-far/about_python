@@ -53,6 +53,8 @@
     }
 
 ---------------------------------------------------- Atalhos úteis ----------------------------------------------------
+    ctrl + alt + 7         || Esconder blocos de código
+    ctrl + alt + 8         || Revelar blocos de código
     ctrl + shift + '       || Abrir terminal do vscode
     ctrl + shift + p       || Abrir configurações
     ctrl + ;               || Comentar uma linha de código específica
@@ -61,7 +63,7 @@
     ctrl + b               || Abrir/fechar o painel lateral esquerdo
     ctrl + x               || Excluir uma linha de código
     alt + shift + f        || Corrigi códigos (prettier code formatter já faz isso)
-    ctrl + alt + shift + / || Selecionar múltiplas linhas de código (customizado)
+    ctrl + alt + shift + / || Selecionar e comentar múltiplas linhas de código (customizado)
     ctrl + alt + shift + j || Selecionar todas as ocorrências de uma busca (customizado)
     ctrl + alt + shift + c || Copiar uma linha selecionada para baixo (customizado)
     alt + mouse esquerdo   || Selecionar múltiplas linhas, em uma posição específica

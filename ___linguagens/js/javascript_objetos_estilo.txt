@@ -1,0 +1,14 @@
+
+https://www.w3schools.com/jsref/dom_obj_style.asp
+
+Usar em funções e modificar coisas na página:
+
+ex: 
+
+<script>
+  function test() {
+    // document.body.style.backgroundColor = 'red'
+    // document.body.style.backgroundImage = "url('test_image.png')"
+    document.body.style.backgroundImage = 'linear-gradient(to left, #222, black, gray)'
+    }
+</script>
