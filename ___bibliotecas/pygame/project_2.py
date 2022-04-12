@@ -146,21 +146,41 @@ NOMEMCLATURA DAS TECLAS
     K_POWER               power
     K_EURO                Euro
     K_AC_BACK             Android back button
+
+RASCUNHO
+    # MÉTODOS DE CONFIGURAÇÃO (APÓS CRIAR OBJETOS)
+    # def text_setup():
+    #
+    #     text_index_counter = 0
+    #     while text_index_counter < 50:
+    #         texts.append(Language(None,
+    #                               50,
+    #                               text_generator(),
+    #                               'red',
+    #                               x_or_y_generator(True, False),
+    #                               x_or_y_generator(False, True))
+    #                      )
+    #         text_index_counter += 1
+            # text = Language(None, 50, 'Pygame', 'red', 100, 100)
 """
 
 import pygame
 from random import choice
 from collections import namedtuple
 
+game_active = None
 
 score_admin = 0
 
 width, height = 600, 600
+
 bottom_left_x = 0
 bottom_right_x = 600
 bottom_right_y = 600
+
 player_height = 70
 player_width_global = 70
+
 shell_width = 36
 shell_height = 32
 surface_height = 61
@@ -172,14 +192,20 @@ controls = {
     }
 }
 
+# ARMAZENAMENTO DE OBJETOS
+landscapes = []
+texts_for_fail = []
+texts_for_intro = []
+
+# SETUP PRINCIPAL DO PYGAME
 pygame.init()
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption('Teste')
+pygame.display.set_caption('PROJETO')
 clock = pygame.time.Clock()
-game_active = None
 
 
-# ALTERNATIVOS
+# UTILIDADES
+
 def ink():
     from random import choice
     colors = [*range(0, 256)]
@@ -193,9 +219,9 @@ def text_generator():
     return f'{choice(vowels)}{choice(values)}{choice(vowels)}{choice(values)}{choice(vowels)}{choice(values)}'
 
 
-def x_or_y_generator(horizontal=False, vertical=False):
-    x = [*range(0, width + 1)]
-    y = [*range(0, height + 1)]
+def x_or_y_generator(canvas_width, canvas_height, horizontal=False, vertical=False):
+    x = [*range(0, canvas_width + 1)]
+    y = [*range(0, canvas_height + 1)]
 
     if horizontal:
         return choice(x)
@@ -209,77 +235,112 @@ def random_background(random, chosen_color):
     return screen.fill(chosen_color)
 
 
+def random_horizontal_location():
+    from random import choice
+    source_dimensions = [*range(0, 600 + 1)]
+    difference = [*range(100, 200 + 1)]
+    return choice(source_dimensions) - choice(difference)
+
+
+# <teste>
+# def obstacle_movement(obstacle_list):
+#     if obstacle_list:
+#         for obstacle in obstacle_list:
+#             obstacle.x -= 5
+#             obstacle = obstacle.rect()
+#             obstacle.rect_into_rect()
+#             obstacle.draw_custom()
+#             obstacle.move('right', 10)
+#         return obstacle_list
+#     else:
+#         return []
+
+
 # IMPORTANTES
-def button_range(button_name):
-    if button_name == 'play_button':
-        return range(200, 321), range(395, 426)
 
+def events_watcher(context_type):
 
-def events_watcher_in_game():
-    global controls
-    for event_in_game in pygame.event.get():
-        # Fechar o jogo ao apertar no "X"d
-        if event_in_game.type == pygame.QUIT:
-            exit(0)
+    global controls, game_active, score_admin
 
-        # Localização do mouse ao mexer
-        if event_in_game.type == pygame.MOUSEMOTION:
-            print('')  # print(event.pos)
+    if context_type == 'intro':
+        mouse_left_click_pressed = pygame.mouse.get_pressed()[0]
 
-        # Tecla apertada sem soltar
-        if event_in_game.type == pygame.MOUSEBUTTONDOWN:
-            print('')  # print('Há uma tecla sendo pressionada')
+        for event_intro in pygame.event.get():
 
-        # Tecla solta
-        if event_in_game.type == pygame.MOUSEBUTTONUP:
-            print('')  # print('Uma tecla foi solta')
+            if event_intro.type == pygame.QUIT:
+                exit(0)
 
-        if event_in_game.type == pygame.KEYDOWN:
-            if event_in_game.key == pygame.K_d:
-                controls['setup']['go_right'] = 10
-            if event_in_game.key == pygame.K_a:
-                controls['setup']['go_left'] = 10
-            if event_in_game.key == pygame.K_w and player_rect.bottom >= height - surface_height:
-                # No loop de animação o valor vai modificando
-                player.gravity = -35
-        if event_in_game.type == pygame.KEYUP:
-            if event_in_game.key == pygame.K_d:
+            # Iniciar o jogo (sair da tela de entrada)
+            if mouse_left_click_pressed \
+                    and event_intro.pos[0] in element_dimension('play_button')[0] \
+                    and event_intro.pos[1] in element_dimension('play_button')[1]:
+                game_active = True
+
+    elif context_type == 'in_game':
+        for event_in_game in pygame.event.get():
+
+            if event_in_game.type == pygame.QUIT:
+                exit(0)
+
+            # <teste>
+            # if event_in_game.type == obstacle_timer:
+            #     enemies.append(
+            #         Enemy(
+            #             images_for_in_game.shell,
+            #             random_horizontal_location(),
+            #             bottom_right_y - (shell_height + surface_height),
+            #             shell_width,
+            #             shell_height
+            #         ))
+
+            # Localização do mouse ao mexer
+
+            if event_in_game.type == pygame.MOUSEMOTION:
+                print('')  # print(event.pos)
+
+            # Tecla apertada sem soltar
+            if event_in_game.type == pygame.MOUSEBUTTONDOWN:
+                print('')  # print('Há uma tecla sendo pressionada')
+
+            # Tecla solta
+            if event_in_game.type == pygame.MOUSEBUTTONUP:
+                print('')  # print('Uma tecla foi solta')
+
+            if event_in_game.type == pygame.KEYDOWN:
+                if event_in_game.key == pygame.K_d:
+                    controls['setup']['go_right'] = 10
+                if event_in_game.key == pygame.K_a:
+                    controls['setup']['go_left'] = 10
+                if event_in_game.key == pygame.K_w and player_rect.bottom >= height - surface_height:
+                    # No loop de animação o valor vai modificando
+                    player.gravity = -35
+
+            if event_in_game.type == pygame.KEYUP:
+                if event_in_game.key == pygame.K_d:
+                    controls['setup']['go_right'] = 0
+                if event_in_game.key == pygame.K_a:
+                    controls['setup']['go_left'] = 0
+
+    elif context_type == 'fail':
+
+        for event_fail in pygame.event.get():
+
+            if event_fail.type == pygame.QUIT:
+                exit(0)
+
+            if event_fail.type == pygame.KEYUP and event_fail.key == pygame.K_ESCAPE:
                 controls['setup']['go_right'] = 0
-            if event_in_game.key == pygame.K_a:
                 controls['setup']['go_left'] = 0
+                player.gravity = 0
+                player_rect.top = 0
+                player_rect.left = 0
+                score_admin = 0
+                game_active = True
 
 
-def events_watcher_for_intro():
-    global game_active
-
-    mouse_left_click_pressed = pygame.mouse.get_pressed()[0]
-    # mouse_middle_click_pressed = pygame.mouse.get_pressed()[1]
-    # mouse_right_click_pressed = pygame.mouse.get_pressed()[2]
-
-    for event_intro in pygame.event.get():
-
-        if event_intro.type == pygame.QUIT:
-            exit(0)
-
-        # Iniciar o jogo (sair da tela de entrada)
-        if mouse_left_click_pressed \
-           and event_intro.pos[0] in button_range('play_button')[0] \
-           and event_intro.pos[1] in button_range('play_button')[1]:
-            game_active = True
-
-
-def events_watcher_for_fail():
-    global score_admin, game_active
-
-    for event_for_fail in pygame.event.get():
-        if event_for_fail.type == pygame.KEYUP and event_for_fail.key == pygame.K_ESCAPE:
-            controls['setup']['go_right'] = 0
-            controls['setup']['go_left'] = 0
-            player.gravity = 0
-            player_rect.top = 0
-            player_rect.left = 0
-            score_admin = 0
-            game_active = True
+def element_dimension(element_name):
+    if element_name == 'play_button':
+        return range(200, 321), range(395, 426)
 
 
 def which_mouse_button():
@@ -302,12 +363,6 @@ def score_counter(reset_engine):
     the_text.text_config()
     the_text.rect()
     the_text.draw()
-
-
-# ARMAZENAMENTO DE OBJETOS
-landscapes = []
-texts_for_fail = []
-texts_for_intro = []
 
 
 class Player:
@@ -356,6 +411,9 @@ class Player:
             self.gravity = 0
             self.image_rect.bottom = canvas_height - the_surface_height
 
+    def landscape_motion(self):
+        pass
+
     def __init__(self, image, x, y):
         self.image = pygame.image.load(image).convert_alpha()
         self.x = x
@@ -370,6 +428,10 @@ class Enemy:
 
     def rect(self):
         self.image_rect = pygame.transform.scale(self.image, (self.custom_width, self.custom_height)).get_rect(topleft=(self.x, self.y))
+        return self.image_rect
+
+    def rect_custom(self):
+        self.image_rect = pygame.transform.rotozoom(self.image, 90, 2).get_rect(topleft=(self.x, self.y))
         return self.image_rect
 
     def rect_into_rect(self):
@@ -538,11 +600,26 @@ images_for_in_game = ImagesInGame(
     'assets\\shells\\shell_cyan_single_tr.gif'
 )
 
-# BOTÃO / interação = text_display() + TextsForIntro + written_content_when_intro
-texts_for_intro.append(Language(None, 50, 'JOGAR', ink(), 200, 395))
 
-texts_for_fail.append(Language(None, 50, 'GAME OVER', ink(), 200, 200))
-texts_for_fail.append(Language(None, 20, 'Pressione ESC para continuar', ink(), 200, 250))
+def intro_display():
+    # Desenho do lobo na tela
+    intro = Image(images_for_intro.intro, 200, 200)
+    intro.rect()
+    intro.rect_into_rect()
+    intro.draw()
+    # Desenho do botão: JOGAR
+    written_content_when_intro.play.draw()
+
+
+def add_into(object_box, new_object):
+    object_box.append(new_object)
+
+
+# BOTÃO / interação = text_display() + TextsForIntro + written_content_when_intro
+add_into(texts_for_intro, Language(None, 50, 'JOGAR', ink(), 200, 395))
+add_into(texts_for_fail, Language(None, 50, 'GAME OVER', ink(), 200, 200))
+add_into(texts_for_fail, Language(None, 20, 'Pressione ESC para continuar', ink(), 200, 250))
+
 
 TextsForIntro = namedtuple('LanguageTuple', ['play'])
 written_content_when_intro = TextsForIntro(*texts_for_intro)
@@ -550,8 +627,24 @@ written_content_when_intro = TextsForIntro(*texts_for_intro)
 TextsForFail = namedtuple('LanguageTuple', ['game_over', 'game_over_instruction'])
 written_content_when_fail = TextsForFail(*texts_for_fail)
 
-landscapes.append(Landscape(images_for_in_game.background, 0, 0))
-landscapes.append(Landscape(images_for_in_game.hills, 0, 0))
+
+def text_display(scenario):
+    if scenario == 'intro':
+        for index in texts_for_intro:
+            index.text_config()
+            index.rect()
+            index.rect_into_rect()
+    elif scenario == 'in_game':
+        pass
+    elif scenario == 'fail':
+        for index in texts_for_fail:
+            index.text_config()
+            index.rect()
+            index.rect_into_rect()
+
+
+add_into(landscapes, Landscape(images_for_in_game.background, 0, 0))
+add_into(landscapes, Landscape(images_for_in_game.hills, 0, 0))
 
 surface = Platform(
     images_for_in_game.mario_world_surface,
@@ -579,93 +672,66 @@ line1 = Line(ink(), 0, 0, 600, 600, 10)
 ellipse1 = Ellipse(ink(), 50, 200, 100, 100)
 
 
-def intro_display():
-    # Desenho do lobo na tela
-    intro = Image(images_for_intro.intro, 200, 200)
-    intro.rect()
-    intro.rect_into_rect()
-    intro.draw()
-    # Desenho do botão: JOGAR
-    written_content_when_intro.play.draw()
+def score_at_danger():
+    global score_admin
+    if player_rect.right - shell_cyan_rect.right in [*range(20, 41)]:
+        score_admin += 1
 
 
-# MÉTODOS DE CONFIGURAÇÃO (APÓS CRIAR OBJETOS)
-# def text_setup():
-#
-#     text_index_counter = 0
-#     while text_index_counter < 50:
-#         texts.append(Language(None,
-#                               50,
-#                               text_generator(),
-#                               'red',
-#                               x_or_y_generator(True, False),
-#                               x_or_y_generator(False, True))
-#                      )
-#         text_index_counter += 1
-        # text = Language(None, 50, 'Pygame', 'red', 100, 100)
+def back_onto_surface():
+    player.gravity += 4.4
 
 
-def text_display(scenario):
-    if scenario == 'intro':
-        for index in texts_for_intro:
-            index.text_config()
-            index.rect()
-            index.rect_into_rect()
-    elif scenario == 'in_game':
-        pass
-    elif scenario == 'fail':
-        for index in texts_for_fail:
-            index.text_config()
-            index.rect()
-            index.rect_into_rect()
+# <teste>
+# enemies = []
+# obstacle_timer = pygame.USEREVENT + 1
+# pygame.time.set_timer(obstacle_timer, 900)
 
-
-# LOOP PRINCIPAL
 while True:
 
-    if game_active:
-        # DETECTOR DE AÇÕES/EVENTOS
-        events_watcher_in_game()
+    # JOGO NÃO INICIADO
+    if game_active is None:
+        events_watcher('intro')
+        random_background(False, '#222222')
+        text_display('intro')
+        intro_display()
 
-        # VALORES INCREMENTÁVEIS
-        player.gravity += 4.4
-        score_admin += 0.06
+    # JOGO EM ANDAMENTO
+    if game_active:
 
         # IMAGENS PRIMÁRIAS
         for landscape in landscapes:
             landscape.draw()
 
-        # GERENCIAMENTO DE PONTUAÇÃO
+        events_watcher('in_game')
+        score_at_danger()
         score_counter(score_admin)
+        back_onto_surface()
 
         surface.draw()
 
-        # CRIAÇÃO
         player.rect_into_rect()
         player.draw()
-
-        # MOVIMENTOS
         player.move('down', player.gravity)
         player.move('right', controls['setup']['go_right'])
         player.move('left', controls['setup']['go_left'])
-
-        # GERENCIAMENTO
         player.reset_right(width, player_width_global)
         player.ground_interaction(height, surface_height)  # Em caso de problema, mover para o final
 
-        # CRIAÇÃO
         shell_cyan.rect_into_rect()
         shell_cyan.draw_custom()
-
-        # MOVIMENTO
         shell_cyan.move('left', 1)
 
         # CONGELAMENTO DOS FRAMES
         if shell_cyan_rect.colliderect(player_rect):
             game_active = False
 
-    # Quando o jogo parar
+        # <teste>
+        # enemies = obstacle_movement(enemies)
+
+    # GAME OVER
     if game_active is False:
+        events_watcher('fail')
         text_display('fail')  # Configuração para uso dos métodos "draw()"
         written_content_when_fail.game_over.draw()
         written_content_when_fail.game_over_instruction.draw()
@@ -682,11 +748,5 @@ while True:
                 score_admin = 0
                 game_active = True
 
-    if game_active is None:
-        random_background(False, '#222222')
-        text_display('intro')
-        intro_display()
-        events_watcher_for_intro()
-
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(30)
