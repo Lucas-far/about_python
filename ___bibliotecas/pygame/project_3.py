@@ -185,6 +185,7 @@ bottom_left_x = 0
 bottom_right_x = 600
 bottom_right_y = 600
 
+player_health = 100
 player_height = 70
 player_width_global = 70
 
@@ -216,7 +217,9 @@ texts = {
     'setup': {
         'launch': 'JOGAR',
         'cease': 'GAME OVER',
-        'continue': 'Pressione ESC para voltar ao MENU'
+        'continue': 'Pressione ESC para voltar ao MENU',
+        'health_label': 'Saúde: ',
+        'health': f'{player_health}',
     }
 }
 
@@ -227,10 +230,63 @@ controls = {
     }
 }
 
+player_moves = {
+    'setup': {
+        'walk_right_frame_1': '\\assets\\players\\pygame\\walk_right_pic_1.png',
+        'walk_right_frame_2': '\\assets\\players\\pygame\\walk_right_pic_2.png',
+        'walk_right_frame_3': '\\assets\\players\\pygame\\walk_right_pic_3.png',
+        'walk_right_frame_4': '\\assets\\players\\pygame\\walk_right_pic_4.png',
+        'walk_right_frame_5': '\\assets\\players\\pygame\\walk_right_pic_5.png',
+        'walk_right_frame_6': '\\assets\\players\\pygame\\walk_right_pic_6.png',
+        'walk_right_frame_7': '\\assets\\players\\pygame\\walk_right_pic_7.png',
+        'walk_right_frame_8': '\\assets\\players\\pygame\\walk_right_pic_8.png',
+        'walk_right_frame_9': '\\assets\\players\\pygame\\walk_right_pic_9.png',
+    }
+}
+
+# <teste>
+player_index = 0
+
+# <teste>
+walk_right = [
+        player_moves['setup']['walk_right_frame_1'],
+        player_moves['setup']['walk_right_frame_2'],
+        player_moves['setup']['walk_right_frame_3'],
+        player_moves['setup']['walk_right_frame_4'],
+        player_moves['setup']['walk_right_frame_5'],
+        player_moves['setup']['walk_right_frame_6'],
+        player_moves['setup']['walk_right_frame_7'],
+        player_moves['setup']['walk_right_frame_8'],
+        player_moves['setup']['walk_right_frame_9'],
+    ]
+
+# <teste>
+player_surf = walk_right[player_index]
+
+
+# <teste>
+def player_animation():
+    global player_surf, player_index
+
+    player_index += 0.1
+    if player_index >= len(walk_right):
+        player_index = 0
+    else:
+        player_surf = walk_right[(int(player_index))]
+
+
+# <teste>
+def player_go_right(player_image):
+    global player_index
+    player_image.image = walk_right[player_index]
+    player_index += 1
+
+
 # ARMAZENAMENTO DE OBJETOS
 landscapes = []
-texts_for_fail = []
 texts_for_intro = []
+texts_for_in_game = []
+texts_for_fail = []
 enemies = []
 enemies_rect = []
 
@@ -275,7 +331,8 @@ def random_background(random, chosen_color):
 def canvas_location_random():
     from random import choice
 
-    out_of_canvas = [*range(width + 100, 17_000 + 1)]
+    # out_of_canvas = [*range(width + 100, 1_200 + 1)]
+    out_of_canvas = [*range(width + 50, width + 50 + 1000)]
     return choice(out_of_canvas)
 
 
@@ -297,7 +354,7 @@ def add_into(object_box, new_object):
 
 def events_watcher(context_type):
 
-    global controls, enemies, game_active, score_admin
+    global controls, enemies, game_active, score_admin, player_index
 
     if context_type == 'intro':
         mouse_left_click_pressed = pygame.mouse.get_pressed()[0]
@@ -332,10 +389,13 @@ def events_watcher(context_type):
                 print('')  # print('Uma tecla foi solta')
 
             if event_in_game.type == pygame.KEYDOWN:
+
                 if event_in_game.key == pygame.K_d:
                     controls['setup']['go_right'] = 10
+
                 if event_in_game.key == pygame.K_a:
                     controls['setup']['go_left'] = 10
+
                 if event_in_game.key == pygame.K_w and player_rect.bottom >= height - surface_height:
                     # No loop de animação o valor vai modificando
                     player.gravity = -50
@@ -343,6 +403,7 @@ def events_watcher(context_type):
             if event_in_game.type == pygame.KEYUP:
                 if event_in_game.key == pygame.K_d:
                     controls['setup']['go_right'] = 0
+
                 if event_in_game.key == pygame.K_a:
                     controls['setup']['go_left'] = 0
 
@@ -442,6 +503,25 @@ class Player:
         self.image_rect = None
 
 
+def player_health_admin(source_location, health_penalty):
+    global game_active, player_health
+
+    # Perda de saúde em caso de colisão
+    print(enemy_collision('shell', enemies_rect, player_rect))
+    if enemy_collision('shell', enemies_rect, player_rect):
+        player_health -= health_penalty
+        print(player_health)
+        texts['setup']['health'] = f'{round(player_health)}'     # Atualização da vida na var fonte
+        source_location.label = texts['setup']['health']  # Atualização da vida na tela
+
+    # Reinicialização dos pontos
+    if player_health <= 0:
+        player_health = 100
+        texts['setup']['health'] = f'{player_health}'
+        source_location.label = texts['setup']['health']
+        game_active = False
+
+
 def score_at_danger(target_box, the_player_rectangle):
     global score_admin
 
@@ -456,6 +536,14 @@ def back_onto_surface(player_image, this_much):
 
 player = Player(images['setup']['player'], bottom_left_x, bottom_right_y - (player_height + surface_height))
 player_rect = player.rect()
+
+frame_counter, frame_amount = 0, 9
+player_config_walk_right = []
+
+while frame_counter < frame_amount:
+    player_config_walk_right.append(Player(player_moves['setup'][f'walk_right_frame_{frame_counter + 1}'], bottom_left_x, bottom_right_y - (player_height + surface_height)))
+    frame_counter += 1
+print(len(player_config_walk_right), player_config_walk_right)
 
 
 class Enemy:
@@ -525,15 +613,29 @@ def enemy_display(target_box):
         enemy.move('left', choice(enemy_speed))
 
 
-def enemy_collision(target_box, player_rectangle):
+def enemy_collision(enemy_name, enemy_rect_box, player_rectangle):
     global game_active
 
-    for enemy_rect in target_box:
-        if enemy_rect.colliderect(player_rectangle):
-            game_active = False
+    if enemy_name:
+        for enemy_rect in enemy_rect_box:
+            if enemy_rect.colliderect(player_rectangle):
+                return True  # Perda de saúde
 
 
-enemy_create(enemies, enemies_rect, 100)
+def enemy_removal_and_renewal(enemy_type, respawn_point, image_box, rectangle_box, counter, amount):
+    if enemy_type == 'shell':
+        for enemy_rect in rectangle_box:
+            if enemy_rect.left < respawn_point:
+                counter -= 1
+                # print(counter)
+            if counter == 0:
+                counter += amount
+                image_box.clear()
+                rectangle_box.clear()
+                enemy_create(image_box, rectangle_box, amount)
+
+
+enemy_create(enemies, enemies_rect, 7)
 
 
 class Image:
@@ -660,6 +762,8 @@ class Language:
 
 # BOTÃO / interação = text_display() + TextsForIntro + written_content_when_intro
 add_into(texts_for_intro, Language(None, 50, texts['setup']['launch'], ink(), 200, 395))
+add_into(texts_for_in_game, Language(None, 40, texts['setup']['health_label'], ink(), 10, 50))
+add_into(texts_for_in_game, Language(None, 40, texts['setup']['health'], ink(), 150, 50))
 add_into(texts_for_fail, Language(None, 50, texts['setup']['cease'], ink(), 200, 200))
 add_into(texts_for_fail, Language(None, 20, texts['setup']['continue'], ink(), 200, 250))
 
@@ -670,8 +774,13 @@ def text_display(scenario):
             index.text_config()
             index.rect()
             index.rect_into_rect()
+
     elif scenario == 'in_game':
-        pass
+        for index in texts_for_in_game:
+            index.text_config()
+            index.rect()
+            # index.rect_into_rect()
+
     elif scenario == 'fail':
         for index in texts_for_fail:
             index.text_config()
@@ -712,6 +821,11 @@ while True:
 
         events_watcher('in_game')
 
+        text_display('in_game')
+        texts_for_in_game[0].draw()
+        texts_for_in_game[1].draw()
+
+        player_health_admin(texts_for_in_game[1], 0.25)
         score_at_danger(enemies_rect, player_rect)
         score_counter(score_admin)
         back_onto_surface(player, 4.4)
@@ -726,8 +840,10 @@ while True:
         player.reset_right(width, player_width_global)
         player.ground_interaction(height, surface_height)  # Em caso de problema, mover para o final
 
+        # Criação: enemy_create() [ fora do loop + chamado no loop ]
         enemy_display(enemies)
-        enemy_collision(enemies_rect, player_rect)
+        enemy_removal_and_renewal('shell', -100, enemies, enemies_rect, 7, 7)  # relação com: enemy_create()
+        enemy_collision('shell', enemies_rect, player_rect)
 
     # GAME OVER
     if game_active is False:
