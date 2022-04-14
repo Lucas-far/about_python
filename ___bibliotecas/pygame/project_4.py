@@ -57,7 +57,6 @@ surface_height = 61
 
 enemy_speed = [*range(0, 8)]
 
-
 shell_types = ('shell_cyan', 'shell_green', 'shell_mud', 'shell_violet', 'shell_yellow')
 
 images = {
@@ -206,12 +205,21 @@ def events_watcher(context_type):
                     controls['setup']['go_right'] = 10
 
                     # TESTE
-                    # player = player_walk_right_surfaces[0]
-                    # player_rect = player_walk_right_rects[0]
-                    # print('-------------------------------------------------------------------------------------------')
-                    # player_live_location = player_location(player_rect)
-                    # print(player_live_location)
-                    # print('-------------------------------------------------------------------------------------------')
+                    # player = player_walk_right_surfaces[1]
+                    # player_rect = player_walk_right_rects[1]
+                    # player_location_update(player_rect, player_live_location)
+                    # print('-------------------------------------------------------------------------', player)
+                    # print('-------------------------------------------------------------------------', player_rect)
+                    # test_counter, counter_end = 0, 9
+                    # while test_counter < counter_end:
+                    #     player = player_walk_right_surfaces[test_counter]
+                    #     player_rect = player_walk_right_rects[test_counter]
+                    #     player_location_update(player_rect, player_live_location)
+                    #     print('-------------------------------------------------------------------------', test_counter)
+                    #     print('-------------------------------------------------------------------------', player)
+                    #     print('-------------------------------------------------------------------------', player_rect)
+                    #     test_counter += 1
+                    # test_counter -= counter_end
 
                 if event_in_game.key == pygame.K_a:
                     controls['setup']['go_left'] = 10
@@ -227,10 +235,7 @@ def events_watcher(context_type):
                     # TESTE
                     # player = player_backup
                     # player_rect = player_rect_backup
-                    # player_rect.top = player_live_location[0]
-                    # player_rect.right = player_live_location[1]
-                    # player_rect.bottom = player_live_location[2]
-                    # player_rect.left = player_live_location[3]
+                    # player_location_update(player_rect, player_live_location)
 
                 if event_in_game.key == pygame.K_a:
                     controls['setup']['go_left'] = 0
@@ -331,6 +336,42 @@ class Player:
         self.gravity = 0
         self.image_rect = None
 
+        self.walk_right_sprites = (
+            'assets\\players\\pygame\\walk_right_pic_1.png',
+            'assets\\players\\pygame\\walk_right_pic_2.png',
+            'assets\\players\\pygame\\walk_right_pic_3.png',
+            'assets\\players\\pygame\\walk_right_pic_4.png',
+            'assets\\players\\pygame\\walk_right_pic_5.png',
+            'assets\\players\\pygame\\walk_right_pic_6.png',
+            'assets\\players\\pygame\\walk_right_pic_7.png',
+            'assets\\players\\pygame\\walk_right_pic_8.png',
+            'assets\\players\\pygame\\walk_right_pic_9.png'
+        )
+
+        self.walk_right_surfaces = [
+            pygame.image.load(self.walk_right_sprites[0]).convert_alpha(),
+            pygame.image.load(self.walk_right_sprites[1]).convert_alpha(),
+            pygame.image.load(self.walk_right_sprites[2]).convert_alpha(),
+            pygame.image.load(self.walk_right_sprites[3]).convert_alpha(),
+            pygame.image.load(self.walk_right_sprites[4]).convert_alpha(),
+            pygame.image.load(self.walk_right_sprites[5]).convert_alpha(),
+            pygame.image.load(self.walk_right_sprites[6]).convert_alpha(),
+            pygame.image.load(self.walk_right_sprites[7]).convert_alpha(),
+            pygame.image.load(self.walk_right_sprites[8]).convert_alpha(),
+        ]
+
+        self.walk_right_rectangles = [
+            self.walk_right_surfaces[0].get_rect(topleft=(self.x, self.y)),
+            self.walk_right_surfaces[1].get_rect(topleft=(self.x, self.y)),
+            self.walk_right_surfaces[2].get_rect(topleft=(self.x, self.y)),
+            self.walk_right_surfaces[3].get_rect(topleft=(self.x, self.y)),
+            self.walk_right_surfaces[4].get_rect(topleft=(self.x, self.y)),
+            self.walk_right_surfaces[5].get_rect(topleft=(self.x, self.y)),
+            self.walk_right_surfaces[6].get_rect(topleft=(self.x, self.y)),
+            self.walk_right_surfaces[7].get_rect(topleft=(self.x, self.y)),
+            self.walk_right_surfaces[8].get_rect(topleft=(self.x, self.y)),
+        ]
+
 
 player = Player(images['setup']['player'], bottom_left_x, bottom_right_y - (player_height + surface_height), 70, 70)
 player_backup = Player(images['setup']['player'], bottom_left_x, bottom_right_y - (player_height + surface_height), 70, 70)
@@ -339,6 +380,12 @@ player_rect_backup = player_backup.rect()
 
 player_walk_right_surfaces = []
 player_walk_right_rects = []
+
+# walk_right_counter = 0
+# walk_right_frames = 9
+# player_walk_right_surfaces2, player_walk_right_rects2 = player.animation_walk_right()
+# print(player_walk_right_surfaces2)
+# print(player_walk_right_rects2)
 
 
 def player_health_admin(source_location, health_penalty):
@@ -372,16 +419,6 @@ def back_onto_surface(player_image, this_much):
     player_image.gravity += this_much
 
 
-def player_location(target_player_rect):
-    temp_locations = [
-        target_player_rect.top,
-        target_player_rect.right,
-        target_player_rect.bottom,
-        target_player_rect.left
-    ]
-    return temp_locations
-
-
 def player_walk_right_config(image_box, rectangle_box, amount):
     surface_counter = 0
     while surface_counter < amount:
@@ -395,6 +432,51 @@ def player_walk_right_config(image_box, rectangle_box, amount):
     while rectangle_counter < amount:
         rectangle_box.append(image_box[rectangle_counter].rect())
         rectangle_counter += 1
+
+
+def player_location(target_player_rect):
+
+    temp_locations = [
+        target_player_rect.top,
+        target_player_rect.right,
+        target_player_rect.bottom,
+        target_player_rect.left,
+
+        target_player_rect.centerx,
+        target_player_rect.centery,
+
+        target_player_rect.center,
+
+        target_player_rect.midtop,
+        target_player_rect.midright,
+        target_player_rect.midbottom,
+        target_player_rect.midleft,
+
+        target_player_rect.topleft,
+        target_player_rect.topright,
+        target_player_rect.bottomleft,
+        target_player_rect.bottomright
+    ]
+
+    return temp_locations
+
+
+def player_location_update(chosen_player_rectangle, location_box):
+    chosen_player_rectangle.top = location_box[0]
+    chosen_player_rectangle.right = location_box[1]
+    chosen_player_rectangle.bottom = location_box[2]
+    chosen_player_rectangle.left = location_box[3]
+    chosen_player_rectangle.centerx = location_box[4]
+    chosen_player_rectangle.centery = location_box[5]
+    chosen_player_rectangle.center = location_box[6]
+    chosen_player_rectangle.midtop = location_box[7]
+    chosen_player_rectangle.midright = location_box[8]
+    chosen_player_rectangle.midbottom = location_box[9]
+    chosen_player_rectangle.midleft = location_box[10]
+    chosen_player_rectangle.topleft = location_box[11]
+    chosen_player_rectangle.topright = location_box[12]
+    chosen_player_rectangle.bottomleft = location_box[13]
+    chosen_player_rectangle.bottomright = location_box[14]
 
 
 player_walk_right_config(player_walk_right_surfaces, player_walk_right_rects, 9)
@@ -689,6 +771,11 @@ while True:
         player.move('left', controls['setup']['go_left'])
         player.reset_right(width, player_width_global)
         player.ground_interaction(height, surface_height)  # Em caso de problema, mover para o final
+
+        # print('-------------------------------------------------------------------------------------------------------')
+        player_live_location = player_location(player_rect)
+        # print(player_live_location)
+        # print('-------------------------------------------------------------------------------------------------------')
 
         # Criação: enemy_create() [ fora do loop + chamado no loop ]
         enemy_display(enemies)
