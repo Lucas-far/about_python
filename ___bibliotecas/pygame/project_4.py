@@ -46,7 +46,7 @@ bottom_left_x = 0
 bottom_right_x = 600
 bottom_right_y = 600
 
-player_health = 100
+player_health = 100  # TODO <
 player_height = 70
 player_width_global = 70
 player_live_location = 0
@@ -79,6 +79,7 @@ texts = {
         'launch': 'JOGAR',
         'cease': 'GAME OVER',
         'continue': 'Pressione ESC para voltar ao MENU',
+        # TODO <
         'health_label': 'Saúde: ',
         'health': f'{player_health}',
     }
@@ -388,6 +389,7 @@ player_walk_right_rects = []
 # print(player_walk_right_rects2)
 
 
+# TODO <
 def player_health_admin(source_location, health_penalty):
     global game_active, player_health
 
@@ -396,8 +398,8 @@ def player_health_admin(source_location, health_penalty):
     if enemy_collision('shell', enemies_rect, player_rect):
         player_health -= health_penalty
         print(player_health)
-        texts['setup']['health'] = f'{round(player_health)}'     # Atualização da vida na var fonte
-        source_location.label = texts['setup']['health']  # Atualização da vida na tela
+        texts['setup']['health'] = f'{round(player_health)}'  # Atualização da vida na var fonte
+        source_location.label = texts['setup']['health']      # Atualização da vida na tela
 
     # Reinicialização dos pontos
     if player_health <= 0:
@@ -698,6 +700,7 @@ class Language:
 
 # BOTÃO / interação = text_display() + TextsForIntro + written_content_when_intro
 add_into(texts_for_intro, Language(None, 50, texts['setup']['launch'], ink(), 200, 395))
+# TODO <
 add_into(texts_for_in_game, Language(None, 40, texts['setup']['health_label'], ink(), 10, 50))
 add_into(texts_for_in_game, Language(None, 40, texts['setup']['health'], ink(), 150, 50))
 add_into(texts_for_fail, Language(None, 50, texts['setup']['cease'], ink(), 200, 200))
@@ -757,7 +760,7 @@ while True:
         texts_for_in_game[0].draw()
         texts_for_in_game[1].draw()
 
-        player_health_admin(texts_for_in_game[1], 0.25)
+        player_health_admin(texts_for_in_game[1], 0.25)  # TODO <
         score_at_danger(enemies_rect, player_rect)
         score_counter(score_admin)
         back_onto_surface(player, 4.4)

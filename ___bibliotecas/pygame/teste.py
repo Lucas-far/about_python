@@ -14,4 +14,17 @@ var4 = 1_000_000
 #     if var3 % var4 == 1:
 #         print('OK')
 
-print(2 % 2 == 1)
+# print(2 % 2 == 1)
+
+
+class A:
+
+    def x(self):
+        return self.x
+
+    def __init__(self):
+        self.x = 0
+
+
+sample = A()
+print(sample.x)
